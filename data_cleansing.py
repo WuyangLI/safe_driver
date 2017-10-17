@@ -33,5 +33,6 @@ def get_train_data(train_path):
 
 def get_test_data(test_path):
     test_df = pd.read_csv(test_path)
+    test_id = test_df['id']
     del test_df['id']
-    return data_cleansing(test_df).as_matrix()
+    return (test_id, data_cleansing(test_df).as_matrix())

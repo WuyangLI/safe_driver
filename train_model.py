@@ -48,7 +48,7 @@ def gini_xgb(preds, dtrain):
 
 def train_model(K):
     (X, y) = get_train_data("../input/train.csv")
-    test_set = get_test_data("../input/test.csv")
+    (test_id, test_set) = get_test_data("../input/test.csv")
     skf = StratifiedKFold(n_splits=K)
     xgb_preds = []
     for train_index, valid_index in skf.split(X, y):
@@ -76,8 +76,7 @@ def train_model(K):
             sum += xgb_preds[j][i]
         preds.append(sum / K)
 
-    id_test = pd.Series(range(0, len(preds)))
-    output = pd.DataFrame({'id': id_test, 'target': preds})
+    output = pd.DataFrame({'id': test_id, 'target': preds})
     output.to_csv("{}-foldCV_avg_sub.csv".format(K), index=False)
 
 if __name__ == "__main__":
