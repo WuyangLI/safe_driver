@@ -37,9 +37,10 @@ def find_threshold(data_path="../input/train.csv"):
     y_pred = model_for_feature_selection.predict(X_test)
     predictions = [round(value) for value in y_pred]
     gini = gini_normalized(y_test, predictions)
-    print("gini: %.4f%%" % gini)
+    print("gini: %.4f" % gini)
     # Fit model using each importance as a threshold
     thresholds = sort(model_for_feature_selection.feature_importances_)
+    print(thresholds)
     for thresh in thresholds:
         # select features using threshold
         selection = SelectFromModel(model_for_feature_selection, threshold=thresh, prefit=True)
@@ -52,7 +53,7 @@ def find_threshold(data_path="../input/train.csv"):
         y_pred = selection_model.predict(select_X_test)
         predictions = [round(value) for value in y_pred]
         gini = gini_normalized(y_test, predictions)
-        print("Thresh=%.3f, n=%d, Accuracy: %.4f%%" % (thresh, select_X_train.shape[1], gini))
+        print("Thresh=%.3f, n=%d, Gini: %.4f" % (thresh, select_X_train.shape[1], gini))
 
 
 def get_selected_data(thresh, model_for_feature_selection, data_df):
